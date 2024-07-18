@@ -1,0 +1,39 @@
+html {
+    display: flex;
+    flex-flow: column nowrap;
+
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    flex-grow: 1;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: flex-start;
+
+    margin: 0;
+
+    background-color: #333;
+}
+
+#noscript {
+    align-self: center;
+
+    border: 2px solid black;
+    border-radius: 1rem;
+    padding: 1rem;
+    background-color: #444;
+
+    font-family: monospace;
+    font-size: xx-large;
+    text-align: center;
+    color: white;
+}
+
+/*
+canvas {
+    background-color: red;
+}
+*/

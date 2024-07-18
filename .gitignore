@@ -2,4 +2,4 @@
 .vscode
 
 # Build folder
-build/
+build/scripts
