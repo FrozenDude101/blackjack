@@ -10,7 +10,7 @@ jobs:
 
     steps:      
       - name: Check Out the Repository
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
       
       - name: Install TypeScript
         run: npm install typescript
