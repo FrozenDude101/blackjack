@@ -1,0 +1,5 @@
+# IDE setup
+.vscode
+
+# Build folder
+build/

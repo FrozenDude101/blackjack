@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "target": "ES2019",
+        "rootDir": "source",
+        "outDir": "build/scripts",
+    }
+}
