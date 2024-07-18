@@ -1,0 +1,34 @@
+name: Build and Deploy to Github Pages
+
+permissions:
+  write-all
+  
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:      
+      - name: Check Out the Repository
+        uses: actions/checkout@v4
+      
+      - name: Install TypeScript
+        run: npm install typescript
+
+      - name: Build Blackjack
+        run: make build-linux
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "build"
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
