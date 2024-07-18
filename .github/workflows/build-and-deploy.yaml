@@ -9,11 +9,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
+    steps:      
       - name: Check Out the Repository
       - uses: actions/checkout@v4
+      
+      - name: Install TypeScript
+        run: npm install typescript
 
-      - name: Run a one-line script
+      - name: Build Blackjack
         run: make build-linux
 
       - name: Setup Pages
