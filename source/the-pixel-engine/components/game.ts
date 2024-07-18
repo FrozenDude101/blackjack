@@ -61,8 +61,8 @@ class Game extends SingletonComponent<Game>() {
     }
 
     public rescale() {
-        let scale = Math.min(this.container.offsetWidth / Game.CANVAS_SIZE.x,
-                             this.container.offsetHeight / Game.CANVAS_SIZE.y);
+        let scale = Math.floor(Math.min(this.container.offsetWidth / Game.CANVAS_SIZE.x,
+                             this.container.offsetHeight / Game.CANVAS_SIZE.y));
         
         this.scale = scale;
         this.canvas.width = Game.CANVAS_SIZE.x * this.scale;
