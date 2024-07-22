@@ -66,9 +66,9 @@ export class Component {
         let previous = this._enabled;
         this._enabled = e;
         if (e && !previous)
-            this.WhenEnabled?.();
+            this.whenEnabled?.();
         else if (!e && previous)
-            this.WhenDisabled?.();
+            this.whenDisabled?.();
     }
     public get enabled(): boolean { return this._enabled && !!this.parent?.enabled; }
 
