@@ -81,7 +81,7 @@ export class Component {
         return this;
     }
 
-    public WhenEnabled?(): void;
-    public WhenDisabled?(): void;
+    public whenEnabled?(): void;
+    public whenDisabled?(): void;
 
 }
