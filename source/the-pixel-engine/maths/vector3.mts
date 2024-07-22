@@ -1,4 +1,7 @@
-class Vector3 {
+import { Vector2 } from "./vector2.mjs";
+
+
+export class Vector3 {
 
     public static readonly ZERO = new Vector3(0, 0, 0);
     public static readonly ONE  = new Vector3(1, 1, 1);
@@ -12,7 +15,7 @@ class Vector3 {
         this.y = y;
         this.z = z;
     }
-    public toVector2() {
+    public toVector2(): Vector2 {
         return new Vector2(this.x, this.y);
     }
 

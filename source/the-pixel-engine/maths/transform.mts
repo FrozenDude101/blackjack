@@ -1,6 +1,12 @@
-class Transform {
+import { assert } from "../types/assert.mjs";
+import { Tuple } from "../types/nTuple.mjs";
+import { Matrix3 } from "./matrix3.mjs";
+import { Vector2 } from "./vector2.mjs";
 
-    public static readonly IDENTITY = new Transform(Matrix3x3.IDENTITY);
+
+export class Transform {
+
+    public static readonly IDENTITY = new Transform(Matrix3.IDENTITY);
 
     public get x():  number { return this.m.values[0][2]; }
     public get y():  number { return this.m.values[1][2]; }
@@ -13,14 +19,14 @@ class Transform {
         this.m.values[1][1], this.m.values[0][2], this.m.values[1][2],
     ]}
 
-    private readonly _m: Matrix3x3;
-    public get m(): Matrix3x3 { return this._m; }
+    private readonly _m: Matrix3;
+    public get m(): Matrix3 { return this._m; }
 
-    constructor(m: Matrix3x3) {
+    constructor(m: Matrix3) {
         this._m = m;
     }
     public static from({x = 0, y = 0, r = 0, sx = 1, sy = 1}): Transform {
-        return new Transform(new Matrix3x3([
+        return new Transform(new Matrix3([
                 [sx*Math.cos(r), sx*-Math.sin(r), x],
                 [sy*Math.sin(r), sy* Math.cos(r), y],
                 [             0,               0, 1],
@@ -36,6 +42,10 @@ class Transform {
 
     public mul(t: Transform): Transform {
         return new Transform(this.m.mul(t.m));
+    }
+
+    public inverse(): Transform {
+        return new Transform(this.m.inverse);
     }
 
     public static translation(x: number, y: number): Transform;

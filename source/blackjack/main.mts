@@ -1,0 +1,1 @@
+import { Component } from "../the-pixel-engine/components/component.mjs";

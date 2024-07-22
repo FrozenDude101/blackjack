@@ -1,8 +1,12 @@
-class Matrix3x3 {
+import { assert } from "../types/assert.mjs";
+import { Tuple, MxNTuple, isMxNTuple } from "../types/nTuple.mjs";
+import { Vector3 } from "./vector3.mjs";
 
-    public static IDENTITY = new Matrix3x3([[1, 0, 0], [0, 1, 0], [0, 0, 1]]);
-    public static ZEROS    = Matrix3x3.fill(0);
-    public static ONES     = Matrix3x3.fill(1);
+export class Matrix3 {
+    
+    public static IDENTITY = new Matrix3([[1, 0, 0], [0, 1, 0], [0, 0, 1]]);
+    public static ZEROS    = Matrix3.fill(0);
+    public static ONES     = Matrix3.fill(1);
 
     private _values: Tuple<Tuple<number, 3>, 3>;
     public get values(): Readonly<Tuple<Readonly<Tuple<number, 3>>, 3>> { return this._values; }
@@ -11,10 +15,10 @@ class Matrix3x3 {
         this._values = values;
     }
     public static fill(n: number) {
-        return new Matrix3x3([[n, n, n], [n, n, n], [n, n, n]]);
+        return new Matrix3([[n, n, n], [n, n, n], [n, n, n]]);
     }
 
-    private map(that: number, func: (a: number, b: number) => number): Matrix3x3 {
+    private map(that: number, func: (a: number, b: number) => number): Matrix3 {
         let values = MxNTuple(3, 3, 0);
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
@@ -22,16 +26,16 @@ class Matrix3x3 {
             }
         }
         
-        return new Matrix3x3(values);
+        return new Matrix3(values);
     }
 
     public add(that: number) { return this.map(that, (a,b) => a+b); }
     public sub(that: number) { return this.map(that, (a,b) => a-b); }
     public div(that: number) { return this.map(that, (a,b) => a/b); }
 
-    public mul(that: number | Matrix3x3): Matrix3x3;
+    public mul(that: number | Matrix3): Matrix3;
     public mul(that: Vector3): Vector3;
-    public mul(that: number | Vector3 | Matrix3x3): Vector3 | Matrix3x3 {
+    public mul(that: number | Vector3 | Matrix3): Vector3 | Matrix3 {
         if (typeof that === "number")
             return this.map(that, (a,b) => a*b);
 
@@ -51,10 +55,10 @@ class Matrix3x3 {
                 }
             }
         }
-        return new Matrix3x3(values);
+        return new Matrix3(values);
     }
 
-    public equals(that: Matrix3x3) {
+    public equals(that: Matrix3) {
         return this.values.every((vs, i) => vs.every((v, j) => v === that.values[i][j]));
     }
 
@@ -71,7 +75,7 @@ class Matrix3x3 {
         this._det = determinant;
         return determinant;
     }
-    private _transpose?: Matrix3x3;
+    private _transpose?: Matrix3;
     public get transpose() {
         if (this._transpose)
             return this._transpose;
@@ -83,12 +87,12 @@ class Matrix3x3 {
             }
         }
 
-        let transpose = new Matrix3x3(values);
+        let transpose = new Matrix3(values);
         transpose._transpose = this;
         this._transpose = transpose;
         return transpose;
     }
-    private _inverse?: Matrix3x3;
+    private _inverse?: Matrix3;
     public get inverse() {
         if (this._inverse)
             return this._inverse;
@@ -99,7 +103,7 @@ class Matrix3x3 {
                 this.values[(i+2)%3][(j+1)%3] * this.values[(i+1)%3][(j+2)%3]
         ));
         assert(isMxNTuple(3, 3, values));
-        let cofactors = new Matrix3x3(values);
+        let cofactors = new Matrix3(values);
         
         let inverse = cofactors.transpose.div(this.det);
         inverse._inverse = this;
