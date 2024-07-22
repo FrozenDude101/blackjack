@@ -62,14 +62,23 @@ export class Component {
 
     
     private _enabled: boolean;
-    public set enabled(e: boolean) { this._enabled = e; }
+    public set enabled(e: boolean) {
+        let previous = this._enabled;
+        this._enabled = e;
+        if (e && !previous)
+            this.WhenEnabled?.();
+        else if (!e && previous)
+            this.WhenDisabled?.();
+    }
     public get enabled(): boolean { return this._enabled && !!this.parent?.enabled; }
 
-    public enable() {
-
+    public enable(): this {
+        this.enabled = true;
+        return this;
     }
-    public disable() {
-        
+    public disable(): this {
+        this.enabled = false;
+        return this;
     }
 
     public WhenEnabled?(): void;
