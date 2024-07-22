@@ -17,7 +17,7 @@ export class Component {
         id?: string,
         transform?: Transform,
         enabled?: boolean,
-    }) {
+    } = {}) {
         if (args.id === undefined)        args.id = Game.registerComponent(this, args.id);
         if (args.transform === undefined) args.transform = Transform.IDENTITY;
         if (args.enabled === undefined)   args.enabled = true;
