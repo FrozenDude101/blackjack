@@ -1,1 +1,3 @@
-import { Component } from "../the-pixel-engine/components/component.mjs";
+import { Game } from "../the-pixel-engine/components/game.mjs";
+
+Game.setup();
