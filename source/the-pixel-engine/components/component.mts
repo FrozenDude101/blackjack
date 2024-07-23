@@ -84,4 +84,20 @@ export class Component {
     public whenEnabled?(): void;
     public whenDisabled?(): void;
 
+
+    private hasEvent<E extends string>(event: E): this is {[key in E]: (...args: unknown[]) => unknown} {
+        // @ts-ignore
+        return this[event] !== undefined && typeof this[event] === "function";
+    }
+    public handleEvent<E extends string>(event: E): void {
+        if (!this.enabled)
+            return;
+
+        if (this.hasEvent(event))
+            this[event]();
+
+        for (let child of this.children)
+            child.handleEvent(event);
+    }
+
 }
