@@ -1,3 +1,3 @@
 import { Game } from "../the-pixel-engine/components/game.mjs";
 
-Game.setup();
+let game = new Game();

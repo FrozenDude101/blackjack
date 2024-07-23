@@ -3,10 +3,12 @@ import { assert } from "../types/assert.mjs";
 import { Component } from "./component.mjs";
 
 
-export class Game {
+export class Game extends Component {
 
 
-    static setup() {
+    constructor() {
+        super();
+
         let container = document.getElementById(this.CONTAINER_ID);
         if (!container) throw `Couldn't find an element with the ID ${this.CONTAINER_ID}.`;
         this.container = container;
@@ -17,16 +19,16 @@ export class Game {
     }
 
 
-    private static CONTAINER_ID = "body";
-    private static CANVAS_SIZE  = new Vector2(320, 180);
-    private static NON_INTEGER_SCALING = false;
+    private CONTAINER_ID = "body";
+    private CANVAS_SIZE  = new Vector2(320, 180);
+    private NON_INTEGER_SCALING = false;
 
-    private static container: HTMLElement;
-    private static canvas: HTMLCanvasElement;
-    private static ctx: CanvasRenderingContext2D;
-    private static scale: number;
+    private container: HTMLElement;
+    private canvas: HTMLCanvasElement;
+    private ctx!: CanvasRenderingContext2D;
+    private scale = 1;
     
-    static refreshCanvasSize() {
+    public refreshCanvasSize() {
         let scale = Math.min(
             this.container.offsetWidth  / this.CANVAS_SIZE.x,
             this.container.offsetHeight / this.CANVAS_SIZE.y,
