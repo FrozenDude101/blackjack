@@ -7,12 +7,6 @@ export class Component {
 
     public readonly id: string;
 
-    private _transform: Transform;
-    public get transform(): Transform { return this.parent ? this.parent.transform.mul(this._transform) : this._transform; }
-    public set localTransform(t: Transform) { this._transform = t; }
-    public set globalTransform(t: Transform) { this._transform = this.parent ? this.parent.transform.inverse().mul(t) : t; }
-
-
     constructor(args: {
         id?: string,
         transform?: Transform,
@@ -62,6 +56,9 @@ export class Component {
 
     
     private _enabled: boolean;
+    public get enabled(): boolean {
+        return this._enabled && !!this.parent?.enabled;
+    }
     public set enabled(e: boolean) {
         let previous = this._enabled;
         this._enabled = e;
@@ -70,7 +67,6 @@ export class Component {
         else if (!e && previous)
             this.whenDisabled?.();
     }
-    public get enabled(): boolean { return this._enabled && !!this.parent?.enabled; }
 
     public enable(): this {
         this.enabled = true;
@@ -80,8 +76,30 @@ export class Component {
         this.enabled = false;
         return this;
     }
+    
+    
+    private _transform: Transform;
+    private _globalTransform?: Transform;
+    public get transform(): Transform {
+        if (this._globalTransform)
+            return this._globalTransform;
+        this._globalTransform = this.parent ? this.parent.transform.mul(this._transform) : this._transform;
+        return this._globalTransform;
+    }
+    public set localTransform(t: Transform) {
+        this._transform = t;
+        this.invalidateCache("_globalTransform");
+    }
+    public set globalTransform(t: Transform) {
+        this._transform = this.parent ? this.parent.transform.inverse().mul(t) : t;
+        this.invalidateCache("_globalTransform");
+    }
 
 
+    private hasAttribute<E extends string>(event: E): this is {[key in E]: any} {
+        // @ts-ignore
+        return this[event] !== undefined;
+    }
     private hasEvent<E extends string>(event: E): this is {[key in E]: (...args: unknown[]) => unknown} {
         // @ts-ignore
         return this[event] !== undefined && typeof this[event] === "function";
@@ -95,6 +113,13 @@ export class Component {
 
         for (let child of this.children)
             child.handleEvent(event);
+    }
+    private invalidateCache<A extends string>(attribute: A) {
+        this.handleEvent("_invalidateCache", attribute)
+    }
+    private _invalidateCache<A extends string>(attribute: A) {
+        if (this.hasAttribute(attribute))
+            delete this[attribute];
     }
 
     public whenStarted?(): void;
