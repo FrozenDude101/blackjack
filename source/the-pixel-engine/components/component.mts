@@ -81,23 +81,29 @@ export class Component {
         return this;
     }
 
-    public whenEnabled?(): void;
-    public whenDisabled?(): void;
-
 
     private hasEvent<E extends string>(event: E): this is {[key in E]: (...args: unknown[]) => unknown} {
         // @ts-ignore
         return this[event] !== undefined && typeof this[event] === "function";
     }
-    public handleEvent<E extends string>(event: E): void {
+    public handleEvent<E extends string>(event: E, ...args: unknown[]): void {
         if (!this.enabled)
             return;
 
         if (this.hasEvent(event))
-            this[event]();
+            this[event](...args);
 
         for (let child of this.children)
             child.handleEvent(event);
     }
+
+    public whenStarted?(): void;
+    public whenStopped?(): void;
+
+    public whenEnabled?(): void;
+    public whenDisabled?(): void;
+
+    public whenTicked?(t: number): void;
+    public whenFixedTicked?(t: number): void;
 
 }
