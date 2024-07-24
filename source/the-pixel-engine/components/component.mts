@@ -4,7 +4,6 @@ import { Transform } from "../maths/transform.mjs";
 
 export class Component {
 
-
     public readonly id: string;
 
     constructor(args: {
@@ -96,11 +95,11 @@ export class Component {
     }
 
 
-    private hasAttribute<E extends string>(event: E): this is {[key in E]: any} {
+    public hasAttribute<E extends string>(event: E): this is {[key in E]: any} {
         // @ts-ignore
         return this[event] !== undefined;
     }
-    private hasEvent<E extends string>(event: E): this is {[key in E]: (...args: unknown[]) => unknown} {
+    public hasEvent<E extends string>(event: E): this is {[key in E]: (...args: unknown[]) => unknown} {
         // @ts-ignore
         return this[event] !== undefined && typeof this[event] === "function";
     }

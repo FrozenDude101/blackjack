@@ -1,6 +1,7 @@
 import { Vector2 } from "../maths/vector2.mjs";
 import { assert } from "../types/assert.mjs";
 import { Component } from "./component.mjs";
+import { Sprite } from "./sprite.mjs";
 
 
 export class Game extends Component {
@@ -46,6 +47,7 @@ export class Game extends Component {
         if (!ctx) throw `Failed to retrieve canvas context.`;
         this.ctx = ctx;
         this.ctx.imageSmoothingEnabled = false;
+        this.ctx.scale(this.scale, this.scale);
     }
 
 
@@ -104,10 +106,21 @@ export class Game extends Component {
     private updateFixedTick(t: number) {
         this.handleEvent("whenFixedTicked", t);
     }
-    private renderFrame() {}
+    private renderFrame() {
+        let sprites = Array.from(Game.sprites.values()).sort((a, b) => a.zIndex - b.zIndex);
+        
+        this.ctx.clearRect(0, 0, this.CANVAS_SIZE.x, this.CANVAS_SIZE.y);
+        for (let sprite of sprites) {
+            this.ctx.save();
+            this.ctx.transform(...sprite.transform.abcdef);
+            sprite.whenRendered(this.ctx);
+            this.ctx.restore();
+        }
+    }
 
 
     private static components: Map<string, Component> = new Map();
+    private static sprites: Map<string, Sprite> = new Map();
     public static registerComponent(component: Component, id?: string): string {
         if (!id) id = component.constructor.name;
 
@@ -117,6 +130,9 @@ export class Game extends Component {
             id = `${id}-${n}`;
         }
         this.components.set(id, component);
+
+        if (component instanceof Sprite)
+            this.sprites.set(id, component);
 
         return id;
     }
@@ -129,6 +145,7 @@ export class Game extends Component {
     }
     public static deleteComponent(id: string) {
         this.components.delete(id);
+        this.sprites.delete(id);
     }
 
 }
