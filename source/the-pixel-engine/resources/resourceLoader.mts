@@ -3,6 +3,8 @@ import { ImageResource, Resource } from "./resource.mjs";
 
 export class ResourceLoader {
 
+    public static readonly BASE_PATH = "resources/";
+
     private static resources: Map<string, Resource> = new Map();
 
     public static registerResource(resource: Resource, id: string) {

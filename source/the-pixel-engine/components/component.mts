@@ -17,7 +17,7 @@ export class Component {
 
         this.id         = args.id;
         this._transform = args.transform;
-        this._enabled    = args.enabled;
+        this._enabled   = args.enabled;
     }
     public delete(): void {
         this.parent?.removeComponent(this.id);

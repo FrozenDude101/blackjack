@@ -1,16 +1,37 @@
 import { Component } from "../../the-pixel-engine/components/component.mjs";
+import { ImageSprite } from "../../the-pixel-engine/components/sprite.mjs";
 import { Kwargs } from "../../the-pixel-engine/types/kwargs.mjs";
+import { CardSprite } from "./cardSprite.mjs";
 
 export class Card extends Component {
 
     public readonly suit: Card.Suit;
     public readonly value: Card.Value;
 
+    private readonly frontSprite: CardSprite;
+    private readonly backSprite: ImageSprite;
+
     constructor(args: Kwargs<typeof Component, {suit: Card.Suit, value: Card.Value}>) {
         super(args);
 
         this.suit = args.suit;
         this.value = args.value;
+
+        this.frontSprite = this.addComponent(new CardSprite(this.suit, this.value));
+        this.backSprite  = this.addComponent(new ImageSprite({path: "cards/back.png"}));
+        this.hide();
+    }
+
+    public get isFaceUp()   { return this.frontSprite.enabled; }
+    public get isFaceDown() { return this.backSprite.enabled;  }
+
+    public show() {
+        this.frontSprite.enable();
+        this.backSprite.disable();
+    }
+    public hide() {
+        this.backSprite.enable();
+        this.frontSprite.disable();
     }
     
 }
@@ -26,8 +47,8 @@ export namespace Card {
         public static HEART   = new Suit();
         public static SPADE   = new Suit();
 
-        public isRed() { return this === Suit.DIAMOND || this === Suit.HEART; }
-        public isBlack() { return !this.isRed(); }
+        public get isRed() { return this === Suit.DIAMOND || this === Suit.HEART; }
+        public get isBlack() { return !this.isRed; }
 
         public toString() {
             switch (this) {

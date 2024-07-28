@@ -42,7 +42,7 @@ export class ImageResource extends Resource {
     private readonly path: string;
     private readonly _image = new Image();
     public get image() {
-        if (!this.isReady) throw `Cannot access an image this is ${this.status}.`;
+        if (!this.isReady) throw `Cannot access an image that is ${this.status}.`;
         return this._image;
     }
 
@@ -55,7 +55,7 @@ export class ImageResource extends Resource {
         super.load();
         this._image.onload  = () => this.whenReady();
         this._image.onerror = () => this.whenFailed();
-        this._image.src = this.path;
+        this._image.src = `${ResourceLoader.BASE_PATH}${this.path}`;
         return this;
     }
 
