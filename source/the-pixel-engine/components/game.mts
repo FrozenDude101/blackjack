@@ -25,6 +25,13 @@ export class Game extends Component {
         this.refreshCanvasSize();
     }
 
+    public get enabled(): boolean {
+        return true;
+    }
+    public set enabled(e: boolean) {
+        super.enabled = e;
+    }
+
 
     private container: HTMLElement;
     private canvas: HTMLCanvasElement;
@@ -107,7 +114,9 @@ export class Game extends Component {
         this.handleEvent("whenFixedTicked", t);
     }
     private renderFrame() {
-        let sprites = Array.from(Game.sprites.values()).sort((a, b) => a.zIndex - b.zIndex);
+        let sprites = Array.from(Game.sprites.values())
+            .filter(c => c.enabled)
+            .sort((a, b) => a.zIndex - b.zIndex);
         
         this.ctx.clearRect(0, 0, this.CANVAS_SIZE.x, this.CANVAS_SIZE.y);
         for (let sprite of sprites) {
