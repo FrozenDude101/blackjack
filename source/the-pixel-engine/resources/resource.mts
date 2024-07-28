@@ -41,7 +41,11 @@ export namespace Resource {
 export class ImageResource extends Resource {
 
     private readonly path: string;
-    private readonly image = new Image();
+    private readonly _image = new Image();
+    public get image() {
+        if (!this.isReady) throw `Cannot access an image this is ${this.status}.`;
+        return this._image;
+    }
 
     constructor(path: string) {
         super(path);
@@ -50,9 +54,9 @@ export class ImageResource extends Resource {
 
     public load(): this {
         super.load();
-        this.image.onload  = () => this.whenReady();
-        this.image.onerror = () => this.whenFailed();
-        this.image.src = this.path;
+        this._image.onload  = () => this.whenReady();
+        this._image.onerror = () => this.whenFailed();
+        this._image.src = this.path;
         return this;
     }
 
