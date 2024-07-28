@@ -14,7 +14,6 @@ export abstract class Resource {
 
     constructor(id: string) {
         this.id = id;
-
         ResourceLoader.registerResource(this, id);
     }
     
